@@ -1,9 +1,17 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { Volume2, VolumeX } from "lucide-react";
 
 export default function Hero() {
   const [loaded, setLoaded] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioStartedRef = useRef(false);
+  const audioStartingRef = useRef(false);
+  const soundEnabledRef = useRef(true);
+  const startTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setLoaded(true), 100);
@@ -74,8 +82,119 @@ export default function Hero() {
     };
   }, []);
 
+  useEffect(() => {
+    soundEnabledRef.current = soundEnabled;
+  }, [soundEnabled]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const maxVolume = 0.22;
+    const minVolume = 0.025;
+
+    const getScrollVolume = () => {
+      const heroHeight = heroRef.current?.offsetHeight ?? window.innerHeight;
+      const fadeDistance = Math.max(heroHeight * 2.75, 1);
+      const progress = Math.min(window.scrollY / fadeDistance, 1);
+
+      return minVolume + (maxVolume - minVolume) * Math.pow(1 - progress, 1.35);
+    };
+
+    const applyScrollVolume = () => {
+      const audio = audioRef.current;
+      if (!audio || !soundEnabledRef.current) return;
+
+      audio.volume = getScrollVolume();
+    };
+
+    const audio = new Audio("/clock.mp3");
+    audio.preload = "auto";
+    audio.loop = true;
+    audio.muted = true;
+    audio.setAttribute("playsinline", "true");
+    audio.volume = getScrollVolume();
+    audioRef.current = audio;
+
+    applyScrollVolume();
+    window.addEventListener("scroll", applyScrollVolume, { passive: true });
+    window.addEventListener("resize", applyScrollVolume);
+    audio.load();
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener("scroll", applyScrollVolume);
+      window.removeEventListener("resize", applyScrollVolume);
+
+      if (startTimeoutRef.current !== null) {
+        window.clearTimeout(startTimeoutRef.current);
+        startTimeoutRef.current = null;
+      }
+
+      if (audioRef.current) {
+        try {
+          audioRef.current.pause();
+        } catch {
+          // Ignore pause errors during teardown.
+        }
+        audioRef.current.src = "";
+        audioRef.current.load();
+        audioRef.current = null;
+      }
+      audioStartedRef.current = false;
+      audioStartingRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (!soundEnabled) {
+      if (startTimeoutRef.current !== null) {
+        window.clearTimeout(startTimeoutRef.current);
+        startTimeoutRef.current = null;
+      }
+      audio.pause();
+      audio.currentTime = 0;
+      audio.muted = true;
+      audioStartedRef.current = false;
+      audioStartingRef.current = false;
+      return;
+    }
+
+    if (audioStartedRef.current || audioStartingRef.current) return;
+
+    audioStartingRef.current = true;
+    audio.muted = false;
+    const maxVolume = 0.22;
+    const minVolume = 0.025;
+    const heroHeight = heroRef.current?.offsetHeight ?? window.innerHeight;
+    const fadeDistance = Math.max(heroHeight * 2.75, 1);
+    const progress = Math.min(window.scrollY / fadeDistance, 1);
+    audio.volume =
+      minVolume + (maxVolume - minVolume) * Math.pow(1 - progress, 1.35);
+    audio.currentTime = 0;
+
+    const delayToNextSecond = 1000 - (Date.now() % 1000) || 1000;
+    startTimeoutRef.current = window.setTimeout(() => {
+      void audio.play()
+        .then(() => {
+          audioStartedRef.current = true;
+        })
+        .catch(() => {
+          audio.muted = true;
+        })
+        .finally(() => {
+          audioStartingRef.current = false;
+          startTimeoutRef.current = null;
+        });
+    }, delayToNextSecond);
+  }, [soundEnabled]);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-obsidian">
+    <section
+      ref={heroRef}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-obsidian"
+    >
       {/* Particle canvas */}
       <canvas
         ref={canvasRef}
@@ -212,6 +331,15 @@ export default function Hero() {
         </span>
         <div className="w-px h-16 bg-gradient-to-b from-gold/60 to-transparent animate-pulse" />
       </div>
+
+      <button
+        type="button"
+        aria-label={soundEnabled ? "Mute banner sound" : "Enable banner sound"}
+        onClick={() => setSoundEnabled((current) => !current)}
+        className="absolute bottom-8 right-8 z-20 flex h-12 w-12 items-center justify-center rounded-full border border-gold/25 bg-obsidian/80 text-pearl backdrop-blur-md transition-all duration-300 hover:border-gold hover:text-gold md:bottom-10 md:right-10"
+      >
+        {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+      </button>
     </section>
   );
 }
@@ -238,7 +366,9 @@ function ClockHands({ loaded }: { loaded: boolean }) {
   });
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    let timeoutId: number;
+
+    const syncClock = () => {
       const now = new Date();
       const seconds = now.getSeconds();
       const nextSecondRaw = seconds * 6;
@@ -272,9 +402,14 @@ function ClockHands({ loaded }: { loaded: boolean }) {
           hourDeg: hourTurns + nextHourRaw,
         };
       });
-    }, 1000);
 
-    return () => clearInterval(interval);
+      const delayToNextSecond = 1000 - now.getMilliseconds() || 1000;
+      timeoutId = window.setTimeout(syncClock, delayToNextSecond);
+    };
+
+    syncClock();
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (

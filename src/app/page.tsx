@@ -1,9 +1,9 @@
 "use client";
-import { useEffect } from "react";
 import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Collections from "@/components/Collections";
+import ArchivePreview from "@/components/ArchivePreview";
 import Craft from "@/components/Craft";
 import Heritage from "@/components/Heritage";
 import Atelier from "@/components/Atelier";
@@ -20,6 +20,7 @@ export default function Home() {
       <main>
         <Hero />
         <Collections />
+        <ArchivePreview />
         <Craft />
         <Heritage />
         <Atelier />

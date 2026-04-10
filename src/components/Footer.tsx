@@ -1,9 +1,12 @@
+import Link from "next/link";
+
 export default function Footer() {
   const links = [
-    { label: "Collections", href: "/#collections" },
-    { label: "Craft", href: "/#craft" },
-    { label: "Journey", href: "/#heritage" },
-    { label: "Atelier", href: "/#atelier" },
+    { label: "Home", href: "/" },
+    { label: "Archive", href: "/archive" },
+    { label: "Materials", href: "/materials" },
+    { label: "About", href: "/about" },
+    { label: "Commission", href: "/commission" },
   ];
 
   return (
@@ -34,12 +37,12 @@ export default function Footer() {
             <ul className="flex flex-col gap-2">
               {links.map((item) => (
                 <li key={item.label}>
-                  <a
+                  <Link
                     href={item.href}
                     className="font-body text-mist/60 text-sm hover:text-gold transition-colors duration-300 italic"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
