@@ -50,11 +50,11 @@ export default function MaterialsPage() {
 
             <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_360px] xl:items-end">
               <div className="max-w-4xl">
-                <h1 className="font-display text-[clamp(3.8rem,9vw,6rem)] font-light leading-[0.88] text-pearl">
+                <h1 className="font-display text-[clamp(3.8rem,8.5vw,5.5rem)] font-light leading-[0.88] text-pearl">
                   A field guide to what actually changes a handmade watch.
                 </h1>
                 <div className="mt-8 h-px w-24 bg-gradient-to-r from-gold/60 to-transparent" />
-                <p className="mt-8 max-w-2xl font-body text-[22px] italic leading-[1.8] text-mist/80">
+                <p className="mt-8 max-w-2xl font-body text-[18px] italic leading-[1.8] text-mist/80">
                   Not a catalog. A working atlas of case metals, dial treatments,
                   hand profiles, engravings, and authored details used to turn six
                   model families into singular commissions.

@@ -7,7 +7,9 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navItems = [
     { label: "Home", href: "/" },
+    { label: "Process", href: "/process" },
     { label: "Materials", href: "/materials" },
+    { label: "FAQ", href: "/faq" },
     { label: "About", href: "/about" },
   ];
 
@@ -21,7 +23,7 @@ export default function Navbar() {
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
-          scrolled ? "py-4 bg-obsidian/80 backdrop-blur-md border-b border-white/5" : "py-8"
+          scrolled ? "py-4 bg-obsidian/80 backdrop-blur-md border-b border-gold/10" : "py-8"
         }`}
       >
         <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
@@ -40,7 +42,7 @@ export default function Navbar() {
           </div>
 
           {/* Nav links */}
-          <ul className="hidden md:flex items-center gap-12">
+          <ul className="hidden md:flex items-center gap-7 lg:gap-10">
             {navItems.map((item) => (
               <li key={item.label}>
                 <Link
@@ -94,6 +96,13 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
+        <Link
+          href="/commission"
+          className="mt-10 border border-gold/40 bg-gold px-7 py-3 font-mono text-[10px] uppercase tracking-[0.3em] text-obsidian transition-colors duration-300 hover:bg-gold-light"
+          onClick={() => setMenuOpen(false)}
+        >
+          Begin Commission
+        </Link>
       </div>
     </>
   );

@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { startTransition, useState, useEffect } from "react";
+import type { CommissionBrief } from "@/lib/commission";
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -163,23 +164,7 @@ const complicationOptions = [
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
 
-type FormState = {
-  name: string;
-  email: string;
-  location: string;
-  wearer: string;
-  model: string;
-  wrist: string;
-  timeline: string;
-  occasion: string;
-  metal: string;
-  dialMood: string;
-  strap: string;
-  references: string;
-  engraving: string;
-  notes: string;
-  complications: string[];
-};
+type FormState = CommissionBrief;
 
 // ─── PRIMITIVES ──────────────────────────────────────────────────────────────
 
@@ -510,6 +495,8 @@ export default function CommissionForm({
 
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [visitedSteps, setVisitedSteps] = useState<Set<number>>(new Set([0]));
   const [form, setForm] = useState<FormState>({
     name: "",
@@ -529,16 +516,20 @@ export default function CommissionForm({
     complications: [],
   });
 
-  const set = <K extends keyof FormState>(k: K, v: FormState[K]) =>
+  const set = <K extends keyof FormState>(k: K, v: FormState[K]) => {
+    setSubmitError("");
     setForm((f) => ({ ...f, [k]: v }));
+  };
 
-  const toggleComp = (val: string) =>
+  const toggleComp = (val: string) => {
+    setSubmitError("");
     setForm((f) => ({
       ...f,
       complications: f.complications.includes(val)
         ? f.complications.filter((c) => c !== val)
         : [...f.complications, val],
     }));
+  };
 
   const completion = [
     Boolean(form.name && form.email),
@@ -556,6 +547,49 @@ export default function CommissionForm({
       setStep(i);
       setVisitedSteps((s) => new Set([...Array.from(s), i]));
     });
+  };
+
+  const handleSubmit = async () => {
+    const hasValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      form.email.trim(),
+    );
+
+    if (!form.name.trim() || !hasValidEmail) {
+      setSubmitError("Please add a valid name and email before sending.");
+      goToStep(0);
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const response = await fetch("/api/commission", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const payload = (await response.json().catch(() => null)) as
+        | { message?: string }
+        | null;
+
+      if (!response.ok) {
+        throw new Error(
+          payload?.message ||
+            "The commission brief could not be sent. Please try again.",
+        );
+      }
+
+      startTransition(() => setSubmitted(true));
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "The commission brief could not be sent. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // ── SUBMITTED ──────────────────────────────────────────────────────────────
@@ -590,8 +624,9 @@ export default function CommissionForm({
           <div className="mb-2 h-px w-16 bg-gradient-to-r from-[#C9A96E]/50 to-transparent" />
 
           <p className="mb-10 max-w-lg font-[Cormorant_Garamond,serif] text-[16px] italic leading-[1.85] text-[#8A877E]">
-            A human review would follow with model guidance, design notes, and a
-            private consultation proposal within 48 hours.
+            The full brief has been translated into a private PDF dossier and
+            sent to the atelier desk. A human review would follow with model
+            guidance, design notes, and a consultation proposal within 48 hours.
           </p>
 
           <div className="mb-10 grid grid-cols-3 gap-px bg-white/[0.06]">
@@ -1043,6 +1078,11 @@ export default function CommissionForm({
 
         {/* ── FOOTER NAV ── */}
         <div className="border-t border-white/[0.05] px-8 py-5 md:px-12 lg:px-14">
+          {submitError && (
+            <p className="mb-4 border border-[#C9A96E]/20 bg-[#C9A96E]/[0.055] px-4 py-3 font-[Cormorant_Garamond,serif] text-[14px] italic text-[#E3C789]">
+              {submitError}
+            </p>
+          )}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             {/* step dots */}
             <div className="flex items-center gap-2">
@@ -1075,12 +1115,13 @@ export default function CommissionForm({
               {step === steps.length - 1 ? (
                 <motion.button
                   type="button"
-                  onClick={() => startTransition(() => setSubmitted(true))}
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="relative overflow-hidden bg-[#C9A96E] px-8 py-2.5 font-[Cinzel,serif] text-[8px] uppercase tracking-[0.28em] text-[#06050A] transition-colors duration-300 hover:bg-[#E8D4A0]"
+                  className="relative overflow-hidden bg-[#C9A96E] px-8 py-2.5 font-[Cinzel,serif] text-[8px] uppercase tracking-[0.28em] text-[#06050A] transition-colors duration-300 hover:bg-[#E8D4A0] disabled:pointer-events-none disabled:opacity-55"
                 >
-                  Send Commission Brief
+                  {isSubmitting ? "Sending Dossier..." : "Send Commission Brief"}
                 </motion.button>
               ) : (
                 <motion.button

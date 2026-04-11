@@ -116,13 +116,13 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_360px] xl:items-end">
+            <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_300px] xl:items-end">
               <div className="max-w-4xl">
-                <h1 className="font-display text-[clamp(3.8rem,8.5vw,7rem)] font-light leading-[0.88] text-pearl">
+                <h1 className="font-display text-[clamp(3.8rem,8.5vw,5.5rem)] font-light leading-[0.88] text-pearl">
                   A private watch house built around one owner at a time.
                 </h1>
                 <div className="mt-8 h-px w-24 bg-gradient-to-r from-gold/60 to-transparent" />
-                <p className="mt-8 max-w-2xl font-body text-[22px] italic leading-[1.8] text-mist/80">
+                <p className="mt-8 max-w-2xl font-body text-[18px] italic leading-[1.8] text-mist/80">
                   Aurum exists for clients who want a handmade mechanical watch
                   to feel authored, not selected. The house is structured around
                   private dialogue, controlled production, and long-term

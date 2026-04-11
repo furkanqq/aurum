@@ -93,16 +93,13 @@ export default function CommissionPage({ searchParams }: CommissionPageProps) {
             {/* eyebrow label */}
             <div className="mb-8 flex items-center gap-4">
               <span className="h-px w-12 bg-gradient-to-r from-transparent to-[#C9A96E]/60" />
-              <p className="font-[Cinzel,serif] text-[9px] uppercase tracking-[0.5em] text-[#C9A96E]/65">
+              <p className="font-mono text-[10px] uppercase tracking-[0.42em] text-[#C9A96E]/65">
                 Private Commission Room
               </p>
             </div>
 
             {/* headline */}
-            <h1
-              className="mb-6 font-[Cormorant_Garamond,serif] font-light leading-[0.88] text-[#F0ECE3]"
-              style={{ fontSize: "clamp(52px, 8vw, 110px)" }}
-            >
+            <h1 className="mb-6 font-display text-[clamp(3.8rem,8.5vw,5.5rem)] font-light leading-[0.88] text-[#F0ECE3]">
               Not a form.
               <br />
               <span className="relative inline-block">
@@ -117,7 +114,7 @@ export default function CommissionPage({ searchParams }: CommissionPageProps) {
             {/* two-column description + card */}
             <div className="grid gap-10 lg:grid-cols-[1fr_480px] lg:items-end">
               <div>
-                <p className="mb-8 max-w-lg font-[Cormorant_Garamond,serif] text-[19px] italic leading-[1.85] text-[#8A877E]">
+                <p className="mb-8 max-w-lg font-body text-[18px] italic leading-[1.8] text-[#8A877E]">
                   Five curated chapters. A private consultation before any metal
                   is touched. Leave only the details that matter — the atelier
                   fills the rest.
@@ -134,7 +131,7 @@ export default function CommissionPage({ searchParams }: CommissionPageProps) {
                   ].map((s) => (
                     <span
                       key={s}
-                      className="font-[Cinzel,serif] text-[8px] uppercase tracking-[0.3em] text-[#4A4840]"
+                      className="font-mono text-[8px] uppercase tracking-[0.3em] text-[#4A4840]"
                     >
                       {s}
                     </span>
@@ -149,29 +146,29 @@ export default function CommissionPage({ searchParams }: CommissionPageProps) {
                 <span className="absolute left-0 top-0 h-8 w-8 border-l border-t border-[#C9A96E]/40" />
                 <span className="absolute bottom-0 right-0 h-8 w-8 border-b border-r border-[#C9A96E]/40" />
 
-                <p className="mb-4 font-[Cinzel,serif] text-[8px] uppercase tracking-[0.4em] text-[#C9A96E]/60">
+                <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.34em] text-[#C9A96E]/60">
                   Commission Anchor
                 </p>
 
                 {selectedModel ? (
                   <>
-                    <div className="mb-1 font-[Cinzel,serif] text-[8px] uppercase tracking-[0.28em] text-[#4A4840]">
+                    <div className="mb-1 font-mono text-[8px] uppercase tracking-[0.28em] text-[#4A4840]">
                       Selected Tone
                     </div>
-                    <div className="mb-3 font-[Cormorant_Garamond,serif] text-[52px] font-light leading-[0.9] text-[#F0ECE3]">
+                    <div className="mb-3 font-display text-[42px] font-light leading-[0.9] text-[#F0ECE3]">
                       {selectedModel}
                     </div>
-                    <p className="font-[Cormorant_Garamond,serif] text-[12px] italic leading-[1.6] text-[#8A877E]/70">
+                    <p className="font-body text-[12px] italic leading-[1.6] text-[#8A877E]/70">
                       A tonal anchor only. The final commission may soften,
                       sharpen, or abandon it entirely.
                     </p>
                   </>
                 ) : (
                   <>
-                    <div className="mb-3 font-[Cormorant_Garamond,serif] text-[42px] font-light leading-[0.9] text-[#F0ECE3]">
+                    <div className="mb-3 font-display text-[42px] font-light leading-[0.9] text-[#F0ECE3]">
                       Open Brief
                     </div>
-                    <p className="font-[Cormorant_Garamond,serif] text-[12px] italic leading-[1.6] text-[#8A877E]/70">
+                    <p className="font-body text-[12px] italic leading-[1.6] text-[#8A877E]/70">
                       No model selected. The atelier will recommend the
                       strongest family after reviewing your brief.
                     </p>
@@ -185,10 +182,10 @@ export default function CommissionPage({ searchParams }: CommissionPageProps) {
                     { k: "Outcome", v: "Proposal" },
                   ].map((r) => (
                     <div key={r.k} className="bg-[#06050A]/80 px-3 py-2.5">
-                      <div className="font-[Cormorant_Garamond,serif] text-[18px] font-light text-[#F0ECE3]">
+                      <div className="font-display text-[18px] font-light text-[#F0ECE3]">
                         {r.v}
                       </div>
-                      <div className="font-[Cinzel,serif] text-[7px] uppercase tracking-[0.22em] text-[#4A4840]">
+                      <div className="font-mono text-[7px] uppercase tracking-[0.22em] text-[#4A4840]">
                         {r.k}
                       </div>
                     </div>
@@ -196,12 +193,12 @@ export default function CommissionPage({ searchParams }: CommissionPageProps) {
                 </div>
 
                 <div className="mt-4 flex items-center justify-between">
-                  <p className="font-[Cormorant_Garamond,serif] text-[11px] italic text-[#4A4840]">
+                  <p className="font-body text-[11px] italic text-[#4A4840]">
                     Review is private & confidential.
                   </p>
                   <Link
                     href="/#atelier"
-                    className="font-[Cinzel,serif] text-[8px] uppercase tracking-[0.25em] text-[#4A4840] transition-colors hover:text-[#C9A96E]"
+                    className="font-mono text-[8px] uppercase tracking-[0.25em] text-[#4A4840] transition-colors hover:text-[#C9A96E]"
                   >
                     ← Atelier
                   </Link>
@@ -214,7 +211,7 @@ export default function CommissionPage({ searchParams }: CommissionPageProps) {
           <div className="relative mx-auto w-full max-w-7xl px-8 md:px-12 pb-8 flex items-center gap-4 opacity-40">
             <div className="flex flex-col items-center gap-1.5">
               <div className="h-8 w-px bg-gradient-to-b from-[#C9A96E] to-transparent" />
-              <span className="font-[Cinzel,serif] text-[7px] uppercase tracking-[0.4em] text-[#C9A96E]">
+              <span className="font-mono text-[7px] uppercase tracking-[0.4em] text-[#C9A96E]">
                 Begin
               </span>
             </div>
@@ -228,7 +225,7 @@ export default function CommissionPage({ searchParams }: CommissionPageProps) {
             <div className="mb-12 flex items-center gap-5">
               <span className="h-px flex-1 bg-gradient-to-r from-transparent to-[#C9A96E]/15" />
               <span className="h-[5px] w-[5px] rotate-45 bg-[#C9A96E] opacity-30" />
-              <span className="font-[Cinzel,serif] text-[8px] uppercase tracking-[0.45em] text-[#4A4840]">
+              <span className="font-mono text-[8px] uppercase tracking-[0.45em] text-[#4A4840]">
                 Commission Dossier
               </span>
               <span className="h-[5px] w-[5px] rotate-45 bg-[#C9A96E] opacity-30" />

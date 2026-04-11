@@ -1,6 +1,4 @@
-import { watchFamilies } from "@/lib/watchData";
-
-export type ArchiveFilter = "All" | "Gallery Frames" | "Model Studies";
+export type ArchiveFilter = "All" | "Gallery Frames";
 
 export type ArchiveEntry = {
   id: string;
@@ -15,7 +13,7 @@ export type ArchiveEntry = {
   accent: string;
 };
 
-const galleryEntries: ArchiveEntry[] = [
+export const archiveEntries: ArchiveEntry[] = [
   {
     id: "archive-01",
     title: "Open Balance Study",
@@ -81,30 +79,47 @@ const galleryEntries: ArchiveEntry[] = [
     fit: "cover",
     accent: "#dec07d",
   },
+  {
+    id: "archive-06",
+    title: "Regulator Light Study",
+    eyebrow: "Frame 06",
+    family: "Meridian",
+    image: "/gallery/watch6.png",
+    source: "Gallery Frames",
+    focus: "Technical surfaces under warm light",
+    note:
+      "A close editorial frame used to show how brushed metal, crystal reflection, and dial depth behave away from flat catalog lighting.",
+    fit: "cover",
+    accent: "#aeb8c4",
+  },
+  {
+    id: "archive-07",
+    title: "Private Desk Composition",
+    eyebrow: "Frame 07",
+    family: "Nocturne",
+    image: "/gallery/watch7.png",
+    source: "Gallery Frames",
+    focus: "Commission atmosphere",
+    note:
+      "A quieter desk composition that makes the watch feel personal before it feels commercial, useful for tone-setting a private brief.",
+    fit: "cover",
+    accent: "#b39b72",
+  },
+  {
+    id: "archive-08",
+    title: "Casework Reflection",
+    eyebrow: "Frame 08",
+    family: "Aurum Atelier",
+    image: "/gallery/watch8.png",
+    source: "Gallery Frames",
+    focus: "Case geometry and finishing",
+    note:
+      "A finishing-led frame focused on silhouette, reflection, and the small shifts in metal tone that separate a commission from a render.",
+    fit: "cover",
+    accent: "#d4b37a",
+  },
 ];
 
-const modelEntries: ArchiveEntry[] = watchFamilies.map((watch, index) => ({
-  id: `model-${watch.id}`,
-  title: `${watch.name} Study`,
-  eyebrow: `Model ${watch.id}`,
-  family: watch.name,
-  image: watch.modelImage,
-  source: "Model Studies",
-  focus: watch.line,
-  note:
-    index % 2 === 0
-      ? `A clean silhouette plate for the ${watch.name} family, used to show proportion, metal tone, and the overall attitude of the commission.`
-      : `A model sheet view of ${watch.name}, intended to make the family legible before the brief turns into specific finishing and signature choices.`,
-  fit: "contain",
-  accent: watch.highlight,
-}));
+export const archiveFilters: ArchiveFilter[] = ["All", "Gallery Frames"];
 
-export const archiveEntries: ArchiveEntry[] = [...galleryEntries, ...modelEntries];
-
-export const archiveFilters: ArchiveFilter[] = [
-  "All",
-  "Gallery Frames",
-  "Model Studies",
-];
-
-export const homeArchiveEntries = archiveEntries.slice(0, 6);
+export const homeArchiveEntries = archiveEntries;

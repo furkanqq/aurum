@@ -51,8 +51,6 @@ export default function ArchiveGallery() {
     total: archiveEntries.length,
     gallery: archiveEntries.filter((entry) => entry.source === "Gallery Frames")
       .length,
-    models: archiveEntries.filter((entry) => entry.source === "Model Studies")
-      .length,
   };
 
   return (
@@ -96,7 +94,9 @@ export default function ArchiveGallery() {
                     background: `radial-gradient(circle at 50% 12%, ${entry.accent}20 0%, transparent 55%)`,
                   }}
                 />
-                <div className={`relative ${index % 5 === 0 ? "aspect-[1.55]" : "aspect-[0.95]"}`}>
+                <div
+                  className={`relative ${index % 5 === 0 ? "aspect-[1.55]" : "aspect-[0.95]"}`}
+                >
                   <Image
                     src={entry.image}
                     alt={entry.title}
@@ -106,9 +106,7 @@ export default function ArchiveGallery() {
                         ? "(min-width: 1280px) 760px, 100vw"
                         : "(min-width: 1280px) 360px, 50vw"
                     }
-                    className={`transition-transform duration-700 group-hover:scale-[1.03] ${
-                      entry.fit === "cover" ? "object-cover" : "object-contain p-8"
-                    }`}
+                    className={`transition-transform duration-700 group-hover:scale-[1.03] object-cover`}
                   />
                 </div>
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/75 to-transparent px-5 pb-5 pt-20">
@@ -133,16 +131,22 @@ export default function ArchiveGallery() {
           </div>
         </div>
 
-        <div className="h-fit rounded-[30px] border border-gold/15 bg-gradient-to-br from-gold/[0.08] to-white/[0.02] p-6">
+        <aside className="h-fit rounded-[30px] border border-gold/15 bg-gradient-to-br from-gold/[0.08] to-white/[0.02] p-6 lg:sticky lg:top-28">
           <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.34em] text-gold/60">
             Archive Index
           </p>
 
           <div className="space-y-4 border-b border-white/10 pb-5">
             {[
-              { label: "Total Frames", value: String(counts.total).padStart(2, "0") },
-              { label: "Gallery Frames", value: String(counts.gallery).padStart(2, "0") },
-              { label: "Model Studies", value: String(counts.models).padStart(2, "0") },
+              {
+                label: "Total Frames",
+                value: String(counts.total).padStart(2, "0"),
+              },
+              {
+                label: "Gallery Frames",
+                value: String(counts.gallery).padStart(2, "0"),
+              },
+              { label: "Source Folder", value: "Gallery" },
             ].map((item) => (
               <div
                 key={item.label}
@@ -163,7 +167,7 @@ export default function ArchiveGallery() {
             proportion, finishing, and the different moods a private commission
             can inhabit.
           </p>
-        </div>
+        </aside>
       </div>
 
       <AnimatePresence>
@@ -225,7 +229,11 @@ function Lightbox({
             alt={entry.title}
             fill
             sizes="(min-width: 1280px) 900px, 100vw"
-            className={entry.fit === "cover" ? "object-cover" : "object-contain p-8 md:p-12"}
+            className={
+              entry.fit === "cover"
+                ? "object-cover"
+                : "object-cover p-8 md:p-12"
+            }
           />
         </div>
 
@@ -279,7 +287,7 @@ function Lightbox({
             {entry.note}
           </p>
 
-          <div className="mt-6 grid grid-cols-2 gap-3">
+          {/* <div className="mt-6 grid grid-cols-2 gap-3">
             <button
               type="button"
               onClick={() => onSelect(previousEntry.id)}
@@ -304,9 +312,12 @@ function Lightbox({
                 {nextEntry.title}
               </div>
             </button>
-          </div>
+          </div> */}
 
-          <div className="mt-6 overflow-x-auto pt-1" style={{ scrollbarWidth: "none" }}>
+          <div
+            className="mt-6 overflow-x-auto pt-1"
+            style={{ scrollbarWidth: "none" }}
+          >
             <div className="flex w-max gap-3">
               {entries.map((thumbnail) => {
                 const isActive = thumbnail.id === entry.id;
@@ -330,7 +341,7 @@ function Lightbox({
                       className={
                         thumbnail.fit === "cover"
                           ? "object-cover"
-                          : "object-contain p-1.5"
+                          : "object-cover p-1.5"
                       }
                     />
                   </button>

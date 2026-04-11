@@ -15,10 +15,6 @@ export default function ArchivePreview() {
     [selectedId],
   );
 
-  const sideEntries = homeArchiveEntries.filter(
-    (entry) => entry.id !== selectedEntry.id,
-  );
-
   return (
     <section id="archive" className="relative z-10 bg-[#09080c] py-28">
       <div className="mx-auto max-w-7xl px-8">
@@ -33,8 +29,8 @@ export default function ArchivePreview() {
           </div>
 
           <p className="reveal reveal-delay-2 max-w-sm font-body text-base italic leading-relaxed text-mist">
-            A rolling archive of portraits, wrist studies, and model plates used
-            to make the atelier feel tangible before a commission begins.
+            A rolling archive of portraits and wrist studies from the gallery,
+            used to make the atelier feel tangible before a commission begins.
           </p>
         </div>
 
@@ -44,7 +40,7 @@ export default function ArchivePreview() {
           <button
             type="button"
             onClick={() => setSelectedId(selectedEntry.id)}
-            className="group relative w-full max-w-[480px] overflow-hidden rounded-[34px] border border-white/10 bg-[#0d0b10] text-left xl:justify-self-start"
+            className="group relative w-full max-w-[480px] overflow-hidden rounded-[34px] border border-gold/[0.12] bg-[#0d0b10] text-left xl:justify-self-start"
           >
             <div
               className="pointer-events-none absolute inset-0 opacity-80"
@@ -59,7 +55,9 @@ export default function ArchivePreview() {
                 fill
                 sizes="(min-width: 1280px) 820px, 100vw"
                 className={`transition-transform duration-700 group-hover:scale-[1.02] ${
-                  selectedEntry.fit === "cover" ? "object-cover" : "object-contain p-10"
+                  selectedEntry.fit === "cover"
+                    ? "object-cover"
+                    : "object-contain p-10"
                 }`}
               />
             </div>
@@ -73,7 +71,7 @@ export default function ArchivePreview() {
                   {selectedEntry.source}
                 </span>
               </div>
-              <h3 className="font-display text-4xl font-light text-pearl md:text-5xl">
+              <h3 className="font-display text-xl font-light text-pearl md:text-2xl">
                 {selectedEntry.title}
               </h3>
               <p className="mt-3 max-w-xl font-body text-[15px] italic leading-7 text-mist/85">
@@ -82,12 +80,12 @@ export default function ArchivePreview() {
             </div>
           </button>
 
-          <div className="flex flex-col gap-4">
+          <div className="relative flex flex-col gap-5">
             <div className="rounded-[30px] border border-gold/15 bg-gradient-to-br from-gold/[0.08] to-white/[0.02] p-6">
               <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.34em] text-gold/60">
                 Archive Focus
               </p>
-              <div className="space-y-4 border-b border-white/10 pb-5">
+              <div className="space-y-4 border-b border-gold/[0.12] pb-5">
                 <div>
                   <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-mist/55">
                     Family
@@ -114,82 +112,46 @@ export default function ArchivePreview() {
 
               <Link
                 href="/archive"
-                className="mt-6 inline-flex items-center justify-center border border-gold/35 bg-gold px-5 py-3 font-mono text-[10px] uppercase tracking-[0.3em] text-obsidian transition-colors duration-300 hover:bg-gold-light"
+                className=" absolute top-6 right-6 inline-flex items-center justify-center border border-gold/35 bg-gold px-5 py-3 font-mono text-[10px] uppercase tracking-[0.3em] text-obsidian transition-colors duration-300 hover:bg-gold-light"
               >
                 Open Full Archive
               </Link>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-2">
-              {sideEntries.slice(0, 2).map((entry) => (
-                <button
-                  key={entry.id}
-                  type="button"
-                  onClick={() => setSelectedId(entry.id)}
-                  className="group flex items-center gap-4 rounded-[24px] border border-white/10 bg-white/[0.03] p-4 text-left transition-colors duration-300 hover:border-white/20 hover:bg-white/[0.05]"
-                >
-                  <div className="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-[18px] bg-black/20">
+            <div className="grid grid-cols-4 gap-3 rounded-[28px] border border-gold/[0.12] bg-[#0d0b10]/80 p-3 sm:gap-4 sm:p-4">
+              {homeArchiveEntries.map((entry) => {
+                const isActive = entry.id === selectedEntry.id;
+
+                return (
+                  <button
+                    key={entry.id}
+                    type="button"
+                    onClick={() => setSelectedId(entry.id)}
+                    aria-label={`Show ${entry.title}`}
+                    className={`group relative aspect-[1.05] h-[77px] w-full overflow-hidden rounded-[18px] border bg-black/25 transition-all duration-300 ${
+                      isActive
+                        ? "border-gold/50 shadow-[0_0_24px_rgba(201,169,110,0.14)]"
+                        : "border-gold/[0.10] hover:border-gold/30"
+                    }`}
+                  >
                     <Image
                       src={entry.image}
                       alt={entry.title}
                       fill
-                      sizes="80px"
-                      className={entry.fit === "cover" ? "object-cover" : "object-contain p-2"}
+                      sizes="(min-width: 1280px) 150px, 22vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.3em] text-gold/60">
-                      {entry.eyebrow}
-                    </div>
-                    <div className="font-display text-2xl font-light text-pearl group-hover:text-gold transition-colors duration-300">
-                      {entry.title}
-                    </div>
-                    <div className="mt-1 font-body text-[14px] italic text-mist/72">
-                      {entry.family}
-                    </div>
-                  </div>
-                </button>
-              ))}
+                    <span
+                      className={`pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent transition-opacity duration-300 ${
+                        isActive
+                          ? "opacity-100"
+                          : "opacity-0 group-hover:opacity-70"
+                      }`}
+                    />
+                  </button>
+                );
+              })}
             </div>
-          </div>
-        </div>
-
-        <div className="mt-8 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-          <div className="flex w-max gap-3 pb-2">
-            {homeArchiveEntries.map((entry) => {
-              const isActive = entry.id === selectedEntry.id;
-
-              return (
-                <button
-                  key={entry.id}
-                  type="button"
-                  onClick={() => setSelectedId(entry.id)}
-                  className={`flex min-w-[210px] items-center gap-3 rounded-[18px] border px-3 py-3 text-left transition-all duration-300 ${
-                    isActive
-                      ? "border-gold/40 bg-gold/[0.08]"
-                      : "border-white/10 bg-white/[0.02] hover:border-white/20"
-                  }`}
-                >
-                  <div className="relative h-16 w-14 flex-shrink-0 overflow-hidden rounded-[14px] bg-black/20">
-                    <Image
-                      src={entry.image}
-                      alt={entry.title}
-                      fill
-                      sizes="56px"
-                      className={entry.fit === "cover" ? "object-cover" : "object-contain p-1.5"}
-                    />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="font-mono text-[8px] uppercase tracking-[0.28em] text-mist/55">
-                      {entry.source}
-                    </div>
-                    <div className="truncate font-display text-[22px] font-light text-pearl">
-                      {entry.title}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
           </div>
         </div>
       </div>
