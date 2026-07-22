@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
+import Image from "next/image";
 
 export default function Hero() {
   const [loaded, setLoaded] = useState(false);
@@ -176,7 +177,8 @@ export default function Hero() {
 
     const delayToNextSecond = 1000 - (Date.now() % 1000) || 1000;
     startTimeoutRef.current = window.setTimeout(() => {
-      void audio.play()
+      void audio
+        .play()
         .then(() => {
           audioStartedRef.current = true;
         })
@@ -195,6 +197,9 @@ export default function Hero() {
       ref={heroRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-obsidian"
     >
+      <div className="w-full h-screen absolute z-0 opacity-35">
+        <Image src={"/banner-bg.webp"} alt="fithouse" fill objectFit="cover" className="" />
+      </div>
       {/* Particle canvas */}
       <canvas
         ref={canvasRef}
