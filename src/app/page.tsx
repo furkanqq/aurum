@@ -2,6 +2,7 @@
 import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import ApertureFilm from "@/components/ApertureFilm";
 import Collections from "@/components/Collections";
 import ArchivePreview from "@/components/ArchivePreview";
 import Craft from "@/components/Craft";
@@ -19,6 +20,7 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <ApertureFilm />
         <Collections />
         <ArchivePreview />
         <Craft />
